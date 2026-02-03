@@ -1,16 +1,16 @@
-'''Python Modules'''
-import datetime
+'''Import modules'''
+#Python Modules
 import re
-from pathlib import Path
-import io
 
-'''External Modules'''
+#External Modules
 from playwright.sync_api import sync_playwright
-import pdfplumber
 import pandas as pd
-import requests
 
-import scripts.functions as functions
+#If run from main, imports from scripts folder. Else, imports locally.
+if __name__ != "__main__":
+    import scripts.functions as functions
+else:
+    import functions
 
 def scrape_vervoer(download):
     '''Setup'''
@@ -94,8 +94,7 @@ def scrape_vervoer(download):
     df=pd.DataFrame(tabs7, columns=["Company", "Market Value (x €1.000)"])
 
     #export
-    file_final = filename + ".csv"
-    df.to_csv(path/file_final)
+    functions.export_df(df, filename, path)
 
 if __name__ == "__main__":
     download = bool(input("Download pdf? (True or False)"))

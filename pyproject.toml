@@ -12,3 +12,24 @@ dependencies = [
     "playwright>=1.57.0",
     "requests>=2.32.5",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.14",
+]
+
+
+[tool.ruff]
+lint.extend-select=[]
+lint.ignore=[]
+exclude = [
+    ".git",
+    ".git-rewrite",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "venv",
+    ".pdf",
+    ".csv",
+    ".tsv"
+]

@@ -1,13 +1,10 @@
-'''Python Modules'''
+'''Imports'''
+#python modules
 import datetime
-import re
 from pathlib import Path
 import io
-
-'''External Modules'''
-from playwright.sync_api import sync_playwright
+#external modules
 import pdfplumber
-import pandas as pd
 import requests
 
 
@@ -47,7 +44,7 @@ def get_pdf(filename, page, link_button, browser, path=None, download=True):
     url = popup_info.value.url 
     r = requests.get(url)
 
-    if download == True:
+    if download:
         #Setup filename
         filename = "raw_" + filename + ".pdf"
 
@@ -74,3 +71,14 @@ def get_pdf(filename, page, link_button, browser, path=None, download=True):
 
     return pdf
 
+'''Export as tsv given dataframe
+df = dataframe object (pandas)
+filename = string
+path = path object (pathlib)'''
+def export_df(df, filename, path=None):
+    file_final = filename + ".tsv"
+
+    if not path:
+        create_path(filename)
+
+    df.to_csv(path/file_final, sep="\t")
