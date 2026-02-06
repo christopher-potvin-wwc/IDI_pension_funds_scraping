@@ -6,3 +6,6 @@ Working scrapers can all be run at once by executing the **main.py file**, where
 Once run, files will be output to the **data folder** underneath the shareholder name and date ran.
 
 Lastly, **wip_Scrapers** contains contains work in progress, old, and un-automated scrapers.
+
+
+This project's dependencies can be downloaded via <a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank">UV.</a>

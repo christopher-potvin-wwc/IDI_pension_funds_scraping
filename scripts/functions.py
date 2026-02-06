@@ -13,7 +13,7 @@ import requests
 def create_path(name="no_name"):
     #Get and format time
     time = datetime.datetime.now()
-    time = time.strftime("%m %d %Y")
+    time = time.strftime("%Y-%m-%d")
 
     #Format directory
     script_dir = Path(__file__).parent.parent #Double parent as It goes functions, to scripts, to repository
@@ -33,9 +33,8 @@ page = browser page (playwright)
 link_button = button to be clicked (playwright)
 browser = browser instance (playwright)
 path = file path (pathlib), if left undefined it will run within the function
-download = Toggle on wether or not it downloads
 '''
-def get_pdf(filename, page, link_button, browser, path=None, download=True):
+def get_pdf(filename, page, link_button, browser, path=None):
     #Clicks link_button and stores info
     with page.expect_popup() as popup_info:
         link_button.click()
@@ -44,27 +43,21 @@ def get_pdf(filename, page, link_button, browser, path=None, download=True):
     url = popup_info.value.url 
     r = requests.get(url)
 
-    if download:
-        #Setup filename
-        filename = "raw_" + filename + ".pdf"
+    #Setup filename
+    filename = "raw_" + filename + ".pdf"
 
-        #Run create_path if path not provided
-        if not path:
-            path = create_path(filename)
+    #Run create_path if path not provided
+    if not path:
+        path = create_path(filename)
 
-        #Write pdf data to directory
-        with open(path/filename, 'wb') as f: #wb = with binary
-            for chunk in r.iter_content(chunk_size=8192): #chunk size to slow download speed (avoid errors)
-                if chunk:
-                    f.write(chunk)
+    #Write pdf data to directory
+    with open(path/filename, 'wb') as f: #wb = with binary
+        for chunk in r.iter_content(chunk_size=8192): #chunk size to slow download speed (avoid errors)
+            if chunk:
+                f.write(chunk)
         
         #Returns pdf object in pdfplumber
         pdf = pdfplumber.open(path/filename)
-
-    else:
-        #Save pdf to temporary memory (RAM)
-        pdf = io.BytesIO(r.content)
-        pdf = pdfplumber.open(pdf)
 
     #Close browser
     browser.close()
@@ -81,4 +74,4 @@ def export_df(df, filename, path=None):
     if not path:
         create_path(filename)
 
-    df.to_csv(path/file_final, sep="\t")
+    df.to_csv(path/file_final, sep="\t", index=False)

@@ -15,6 +15,9 @@ no_track/
 #workspace files
 *.code-workspace
 
+#Logs
+*.log
+
 #Don't track scraped data (Date folders remain empty, won't be tracked either)
 #*.tsv
 #*.csv
