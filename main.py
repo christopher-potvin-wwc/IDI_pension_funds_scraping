@@ -13,7 +13,9 @@ logging.basicConfig(filename='log.log', level=logging.INFO, filemode="w", format
 
 #Dictionary of module:function (Note that the scripts.___ is important for python to find directory)
 import_list = {
-    "scripts.vervoer":"scrape_vervoer"
+    "scripts.kpa":"scrape_kpa",
+    "scripts.vervoer":"scrape_vervoer",
+    "scripts.pmt":"scrape_pmt"
     }
 
 
@@ -41,8 +43,8 @@ for x in import_list:
         message = f"Unable to run {import_list[x]}. {e}"
         pass
 
-        #log message
-        logging.info(message)
+    #log message
+    logging.info(message)
 
 
 logging.info(f"Finished running")
