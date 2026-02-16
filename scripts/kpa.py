@@ -1,4 +1,4 @@
-'''Imports'''
+'''Scrapes KPA pensions, a group of companies based in Sweden that offer pension management, insurance, asset managment, and more. Scraper navigates to pdf preview and downloads, then filters for entries based on text size. Then, the data is formatted into a dictionary and exported as a TSV. No manual steps needed unless the website or format changes.'''
 #Python Modules
 import re
 
@@ -13,9 +13,9 @@ if __name__ != "__main__":
 else:
     import functions
 
-
+'''Main function'''
 def scrape_kpa():
-    '''Setup'''
+    #Setup
     filename = "KPA"
     url = "https://www.kpa.se/om-kpa-pension/vart-hallbarhetsarbete/ansvarsfulla-investeringar/innehav-och-uteslutna-bolag/"
     path = functions.create_path(filename)
@@ -43,7 +43,7 @@ def scrape_kpa():
 
 
 
-    '''Extract Entries Based on Font Size'''
+    #Extract Entries Based on Font Size
     entries = []
     for page in pdf.pages:
         #Extract every line in a page, formatted in a list of dictionaries
@@ -58,7 +58,7 @@ def scrape_kpa():
 
 
 
-    '''Formatting Data'''
+    #Formatting Data
 
     #Create columns
     shareholder_name = [filename]
@@ -82,7 +82,7 @@ def scrape_kpa():
 
 
 
-    '''Export'''
+    #Export
     final_df = pd.DataFrame(df)
     #Export as tsv
     functions.export_df(final_df, filename, path)

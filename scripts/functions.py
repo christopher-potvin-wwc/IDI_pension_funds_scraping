@@ -1,4 +1,4 @@
-'''Imports'''
+'''Custom functions module, to be called from other scripts to streamline aspects that repeat logic.'''
 #python modules
 import datetime
 from pathlib import Path

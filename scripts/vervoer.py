@@ -1,4 +1,4 @@
-'''Import modules'''
+'''Scrapes Pensioenfonds Vervoer, a nonprofit pension fund in transport, based in the Netherlands. Scraper navigates to pdf preview and downloads, then extracts and formats text to be filtered out with regular expressions. Additional filtering and formatting done in tandum as entries are prepared to be exported. Exports to TSV. No manual steps needed unless the website or format changes.'''
 #Python Modules
 import re
 
@@ -16,7 +16,7 @@ else:
 
 '''Main Function'''
 def scrape_vervoer():
-    '''Setup'''
+    #Setup
 
     #Create directory for PDFs and CSVs (create_path returns path object used later)
     filename = "vervoer"
@@ -30,7 +30,7 @@ def scrape_vervoer():
 
 
 
-    '''Playwright Setup & Get PDF'''
+    #Playwright Start
     playwright = sync_playwright().start()
 
     #Establish page and browser
@@ -49,7 +49,7 @@ def scrape_vervoer():
 
 
 
-    '''Extract PDF, Create list of entries'''
+    #Extract PDF
     #Fills list with strings containing the text of each page
     tabs = []
     toggle = True
@@ -78,8 +78,6 @@ def scrape_vervoer():
 
     
 
-
-    '''Create and apply Regex'''
     #Create regex, looking for 2 sets of groups of words followed by numbers, or a dash
     pattern = re.compile("(?P<l_key>[A-Za-z\s,]+?)\s+(?P<l_value>([\d\.]+( [\d\.]+)*,?)|(-))\s+(?P<r_key>[A-Za-z\s,]+?)\s+(?P<r_value>([\d\.]+( [\d\.]+)*,?)|(-))")
 
@@ -107,7 +105,6 @@ def scrape_vervoer():
     tabs6 = tabs4 + tabs5
 
 
-    '''Create Dataframe and export'''
     #Create dataframe
     df=pd.DataFrame(tabs6, columns=["Shareholder - Name", "Issuer - Name", "Security - Report Date", "Security - Market Value - Amount", "Security - Market Value - Multiplier", "Security - Market Value - Currency Code", "Data Source URL"])
 
@@ -115,7 +112,6 @@ def scrape_vervoer():
     functions.export_df(df, filename, path)
 
 
-
-
+#If run outside of main
 if __name__ == "__main__":
     scrape_vervoer()

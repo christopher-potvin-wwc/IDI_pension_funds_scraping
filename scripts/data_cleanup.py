@@ -1,15 +1,9 @@
-'''Imports'''
+'''Script to clean up data output folder. Sorts through directories to find data output folders specifically, then loops through each folder to group dates into quarters. Then, picks the earliest month from each quarter to keep, with the latest day used as a tiebreaker. Lastly, all other files are deleted. Currently not meant to be called as a function.'''
+#Imports
 import shutil
 import os
 import datetime
 from pathlib import Path
-
-#may need to tweak if running from main. like an if statement that only sets this to run when working from here. additionally, will add log system.
-# print(os.getcwd())
-# path = Path(os.getcwd())
-# path = path.parent.absolute()
-# os.chdir(path)
-# print(os.getcwd())
 
 '''Setup'''
 year = datetime.datetime.now().year
