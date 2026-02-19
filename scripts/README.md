@@ -8,6 +8,9 @@ Scrapes AP2, a Swedish based company that manages pension funds in buffers. Scra
 ### kpa.py
 Scrapes KPA pensions, a group of companies based in Sweden that offer pension management, insurance, asset managment, and more. Scraper navigates to pdf preview and downloads, then filters for entries based on text size. Then, the data is formatted into a dictionary and exported as a TSV. No manual steps needed unless the website or format changes.
 
+### pka.py
+Scrapes Pensionskassernes Administration a/s, a Denmark based company that claims to invest in causes that comply with the EU's green and social agenda. Scraper begins by downloading pdf with playwright, while attempting to deny cookies if prompted. Then, in a context manager extracts entries and checks for matches with pdfplumber and regular expressions, before writing to a TSV. No manual steps needed unless the website or format changes.
+
 ### pmt.py
 Scraper for PMT - The Metal and Technology Pension Fund from the Netherlands. This pension fund has their investments stored in the html of their website. This scraper navigates to the webpage, scrapes the html, writes it to an html file, and then finds and scrapes the tabular information, which is the issuing company and the market value in euros. In order to find the company name, we checked if the string 'Bedrijfsnaam' was part of the html, and was then removed. No manual steps will be needed unless PMT changes the url or the format of their html tables.
 
