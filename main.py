@@ -1,32 +1,37 @@
-'''Imports'''
-#python modules
+''''''
+#Python modules
 import warnings
 import logging
 
 
 
-'''Setup'''
+#/-----Setup-----/#
+
 #Supress warnings. (For debug purposes, comment this line.)
 warnings.filterwarnings('ignore')
+
 #Configure logging settings
 logging.basicConfig(filename='log.log', level=logging.INFO, filemode="w", format="%(asctime)s - %(message)s")
+#message used to track progress/debug
+message = ""
 
 #Dictionary of module:function (Note that the scripts.___ is important for python to find directory). Alphabetical Order.
 import_list = {
     "scripts.ap2":"scrape_ap2",
     "scripts.bpfbouw":"scrape_bpfbouw",
     "scripts.kpa":"scrape_kpa",
+    "scripts.pka":"scrape_pka",
     "scripts.pmt":"scrape_pmt",
     "scripts.vervoer":"scrape_vervoer"
     }
 
 
-#message used to track progress/debug
-message = ""
 
 
 
-'''Run Scripts'''
+#/-----Run Scripts-----/#
+
+#Log
 logging.info(f"Begin scraping")
 
 for x in import_list:
