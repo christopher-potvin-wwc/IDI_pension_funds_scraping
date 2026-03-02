@@ -8,6 +8,9 @@ Scrapes AP2, a Swedish based company that manages pension funds in buffers. Scra
 ### ap3.py
 Scrapes AP3, a manager for the Swedish public's pension assets. Scraper navigates to AP3 data page, searching for the most recent pdfs in the categories: Swedish, foreign, fixed, and private, downloading them, and returning a list of directories. Then, one-by-one the pdfs are parsed through to find matching entries, the entries are formatted into dataframes, and exported to TSVs.  No manual steps needed unless the website or format changes. Note: This scraper creates four PDFs and four TSVs.
 
+### bpfbouw.py
+Scrapes bpfBOUW, a Dutch company that manages pension funds in the construction industry. Scraper navigates to the bpfBOUW website and downloads the most recent PDF of their shareholder report. Scraper uses regular expression to extract information, and does additional reformatting including extracting the date. A csv file of dutch countries is imported, and removes countries the regex views as companies. Exports to tsv.
+
 ### kpa.py
 Scrapes KPA pensions, a group of companies based in Sweden that offer pension management, insurance, asset managment, and more. Scraper navigates to pdf preview and downloads, then filters for entries based on text size. Then, the data is formatted into a dictionary and exported as a TSV. No manual steps needed unless the website or format changes.
 
