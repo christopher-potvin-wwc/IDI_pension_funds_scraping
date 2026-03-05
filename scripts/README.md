@@ -11,6 +11,9 @@ Scrapes AP3, a manager for the Swedish public's pension assets. Scraper navigate
 ### ap4.py
 Scrapes the fourth Swedish National Pension fund, AP4. Scraper naviagtes to AP4 holdings page with playwright, grabs a list of all links on it, and searches with regex starting from the most recent link until it finds a match. The PDF downloads with requests, and then is scraped with pdfplumber and regex. While extracting the text, each line is split into to and then remerged with ! as a seperator, as the columns "No of Shares" and "Fair Value" would otherwise be difficult/unreliable to search through with regex. Matched data is added to either to a Swedish dataframe or Foreign one depending on country of origin, then 2 tsvs are created (as they were last time AP4 was scraped). No manual steps needed unless the website or format changes.
 
+### ap7.py
+Scrapes AP7, a "building block in the national pension system’s premium pension component" in Sweden. Downloads static HTML file with requests, remformats and matches using regular expressions, and saves as TSV. No manual steps needed unless the website or format changes.
+
 ### bpfbouw.py
 Scrapes bpfBOUW, a Dutch company that manages pension funds in the construction industry. Scraper navigates to the bpfBOUW website and downloads the most recent PDF of their shareholder report. Scraper uses regular expression to extract information, and does additional reformatting including extracting the date. A csv file of dutch countries is imported, and removes countries the regex views as companies. Exports to tsv.
 
@@ -45,5 +48,5 @@ Downloads a pdf if given the button/link on a webpage that leads to a PDF previe
 ##### export_df(df, filename, path)
 Exports dataframe to TSV with pandas.
 
-#### get_pdf_date(pdf)
+##### get_pdf_date(pdf)
 Uses pdfplumber to get pdf creation date. Takes pdf object, returns string in format of "YYYY-MM-DD."
