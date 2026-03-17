@@ -20,6 +20,9 @@ Scrapes AP7, a "building block in the national pension system’s premium pensio
 ### bpfbouw.py
 Scrapes bpfBOUW, a Dutch company that manages pension funds in the construction industry. Scraper navigates to the bpfBOUW website and downloads the most recent PDF of their shareholder report. Scraper uses regular expression to extract information, and does additional reformatting including extracting the date. A csv file of dutch countries is imported, and removes countries the regex views as companies. Exports to tsv.
 
+### bpl.py
+Scrapes BPL pension, a Dutch pension company for employees in agriculture or green energy. Scraper navigates to the downloads page of the BPL website, and uses playwright and requests to download the pdf. Then, it loads the pdf with pdfplumber and sorts through entries with regular expressions. Lastly, the data is formatted and exported as a tsv. No manual steps needed unless the website or format changes.
+
 ### kpa.py
 Scrapes KPA pensions, a group of companies based in Sweden that offer pension management, insurance, asset managment, and more. Scraper navigates to pdf preview and downloads, then filters for entries based on text size. Then, the data is formatted into a dictionary and exported as a TSV. No manual steps needed unless the website or format changes.
 
