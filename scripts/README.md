@@ -23,6 +23,9 @@ Scrapes bpfBOUW, a Dutch company that manages pension funds in the construction 
 ### bpl.py
 Scrapes BPL pension, a Dutch pension company for employees in agriculture or green energy. Scraper navigates to the downloads page of the BPL website, and uses playwright and requests to download the pdf. Then, it loads the pdf with pdfplumber and sorts through entries with regular expressions. Lastly, the data is formatted and exported as a tsv. No manual steps needed unless the website or format changes.
 
+### detailhandel.py
+Scrapes Pensioen Funds Detailhandel, a company based in the Netherlands that manages the investments of non-food retail employees and those retired from the field. This scraper naviagtes to the website, finds the link to the pdf, saves it, and uses it to download the pdf (Note: get_pdf function was not used here, as window was not a popup.) Then, the pdf was split into two sections per page to account for edge cases, and desired attributes for each were saved into a list (Note: memory became an issue on this one, so only the desired attributes were saved, and all others were deleted). Then, regex is used to filter entries, the data is formatted, then exported as a tsv. No manual steps needed unless the website or format changes.
+
 ### kpa.py
 Scrapes KPA pensions, a group of companies based in Sweden that offer pension management, insurance, asset managment, and more. Scraper navigates to pdf preview and downloads, then filters for entries based on text size. Then, the data is formatted into a dictionary and exported as a TSV. No manual steps needed unless the website or format changes.
 
