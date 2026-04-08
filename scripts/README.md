@@ -50,6 +50,9 @@ Scraper for PME pensioenfonds: A Dutch pensionfund for employees in metal and te
 ### vervoer.py
 Scrapes Pensioenfonds Vervoer, a nonprofit pension fund in transport, based in the Netherlands. Scraper navigates to pdf preview and downloads, then extracts and formats text to be filtered out with regular expressions. Additional filtering and formatting done in tandum as entries are prepared to be exported. Exports to TSV. No manual steps needed unless the website or format changes.
 
+### zorg&welzjin.py
+Scrapes Pensionefonds Zorg & Welzjin, a Dutch pension fund for "health, mental, and social inerests." Scraper contains 3 functions, 2 for formatting data and 1 main scraping function. The main function uses a combination of while loops and requests to find the proper JSON files to download from the dynamic HTML website. When found, the files are downloaded, loaded in as dataframes, entries are formatted, and then columns are reordered in new DFs according to IDI schema. Each JSON and dataframe (.tsv) is saved as seperate files (10 files created if scraper ran to full extent). Right now, only tested for December quarter. Depending on future report dates, the dictionary "quarters" may need to be adjusted. Other than that, no manual steps needed unless format of JSON request links or format of data within JSONs change.
+
 # Other
 ### data_cleanup.py
 Script to clean up data output folder. Sorts through directories to find data output folders specifically, then loops through each folder to group dates into quarters. Then, picks the earliest month from each quarter to keep, with the latest day used as a tiebreaker. Lastly, all other files are deleted. Currently not meant to be called as a function.

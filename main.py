@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 repository_dir = Path(__file__).parent
 
 #Configure logging settings
-logging.basicConfig(filename=repository_dir/'log_main.log', level=logging.INFO, filemode="w", format="%(asctime)s - %(message)s")
+logging.basicConfig(filename=repository_dir/'log.log', level=logging.INFO, filemode="w", format="%(asctime)s - %(message)s")
 
 #Message used to track progress/debug
 message = ""
@@ -22,8 +22,8 @@ message = ""
 
 #Dictionary of module:function (Note that the scripts.___ is important for python to find directory). Alphabetical Order.
 import_list = {
-    "scripts.amf":"scrape_amf",
-    "scripts.ap2":"scrape_ap2",
+    # "scripts.amf":"scrape_amf",
+    # "scripts.ap2":"scrape_ap2",
     "scripts.ap3":"scrape_ap3",
     "scripts.ap4":"scrape_ap4",
     "scripts.ap7":"scrape_ap7",
@@ -37,7 +37,8 @@ import_list = {
     "scripts.pensiondanmark":"scrape_pension_danmark",
     "scripts.pme":"scrape_pme",
     "scripts.pmt":"scrape_pmt",
-    "scripts.vervoer":"scrape_vervoer"
+    "scripts.vervoer":"scrape_vervoer",
+    "scripts.zorg&welzjin":"scrape_zw"
     }
 
 
