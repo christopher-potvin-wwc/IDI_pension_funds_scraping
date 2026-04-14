@@ -1,4 +1,4 @@
-'''Scraper for PME pensioenfonds: A Dutch pensionfund for employees in metal and tech industries. Info stored in a dynamic HTML, which takes approximately 5-10 mins to scrape with playwright. Scraper establishes connection to data source page with playwright, and extracts and formats needed information such as the next button, the equity number of pages, and the report date. Then, a while loop is created both to save raw data, and loop through pages to format said data. This script is quite slow, so to combat that it adds its own progress to the main log. Additionally, this script sometimes fails due to a bad network. If failed, try to run again once or twice before giving up. If there is a better solution, it would involve extracting the raw json file that stores the data, which is currently unavailable. But, this script is fully automatic and won't need to be changed unless the format of the website does.'''
+'''Scraper for PME pensioenfonds: A Dutch pensionfund for employees in metal and tech industries. Info stored in a dynamic HTML, which takes approximately 5-10 mins to scrape with playwright. Scraper establishes connection to data source page with playwright, and extracts and formats needed information such as the next button, the equity number of pages, and the report date. Then, a while loop is created both to save raw data, and loop through pages to format said data. This script sometimes fails due to a bad network. If failed, try to run again once or twice before giving up. But, this script is fully automatic and won't need to be changed unless the format of the website does. NOTE: Attempts to fetch data directly were made both synchronously and asynchronously. Sync was slower, and async was faster but often missed pages. Playwright seems to be the best appraoch for now.'''
 #Python modules
 import re
 from pathlib import Path
@@ -90,36 +90,7 @@ def scrape_pme():
         #Split groups into vars
         month, day, year = next_report_date.groups()
 
-        # #Match statement, converts the listed month into the numeric representation of 3 months prior.
-        # match month:
-        #     case "January":
-        #         month = "10"
-        #     case "February":
-        #         month = "11"
-        #     case "March":
-        #         month = "12"
-        #     case "April":
-        #         month = "01"
-        #     case "May":
-        #         month = "02"
-        #     case "June":
-        #         month = "03"
-        #     case "July": 
-        #         month = "04"
-        #     case "August":
-        #         month = "05"
-        #     case "September":
-        #         month = "06"
-        #     case "October":
-        #         month = "07"
-        #     case "November":
-        #         month = "08"
-        #     case "December":
-        #         month = "09"
-        #     case _: #In case of anything else, month is NA
-        #         month = ""
-
-        #Converted to function, but untested in this script. Delete commented code above if works.
+        #Convert month word to date with offset
         month = functions.convert_month(month, -3)
 
         #Convert day to double digit if necessary
@@ -138,14 +109,15 @@ def scrape_pme():
     multiplier = "x1"
 
     #Setup variables for loop
-    count = 0 #Progress loop
+    count = 1 #Progress loop
     new_text = "" #New text to parse
     old_text = "" #Old text to compare new text to (ensure that page has turned)
     entries = [] #Entries for DF
+    progress = [0, 0, 0, 0, 0] #Progress for log (logs up to 500 entries)
 
     #Regular expression to match entries. Follows schema of entries on site, with each category being seperated by a tab. 
     #Edge cases: Symbols and numbers in issuer names. Some country names have multiple words. Some countries have ", Republic of" as a suffix, which the expression does not capture. 
-    entry_pattern = re.compile("(?P<issuer>[A-Za-z\d /&\-,]+)\t(?P<value>[\d\.]+)\t(?P<country>[A-Za-z]+(?: [A-Za-z ]+)?)(?:, Republic of)?\t(?P<sector>[A-Za-z ,\-]+)\t(?P<type>[A-Za-z ]+)")
+    entry_pattern = re.compile("(?P<issuer>[A-Za-z\d\. /&\-,]+)\t(?P<value>[\d\.]+)\t(?P<country>[A-Za-z]+(?: [A-Za-z ]+)?)(?:, Republic of)?\t(?P<sector>[A-Za-z ,\-]+)\t(?P<type>[A-Za-z ]+)")
 
 
 
@@ -157,8 +129,9 @@ def scrape_pme():
 
         logging.info(f"PME - Begin cycling through pages")
 
+
         #Loop through each page
-        while count < page_numbers:
+        while count <= page_numbers:
             
             #Collect text on a page
             new_text = page.inner_text('div')
@@ -196,9 +169,10 @@ def scrape_pme():
                 #After all lines are looped through, tick counter
                 count += 1
 
-                #Log every 10 pages flipped through
-                if count%10 == 0:
-                    logging.info(f"PME - Page {count} sucessfully looped through")
+                #Ideally, a modulo operator could've been used to log every dozen pages, but due to playwright lag that doesn't work.
+                #Uncomment this for debug purposes
+                #logging.info(f"PME - Found page {count}")
+                
 
 
             #If new text and old text are the same, try to click again
@@ -212,8 +186,7 @@ def scrape_pme():
         #At end of pages, close browser, stop playwright, and log success
         browser.close()
         playwright.stop()
-        logging.info(f"PME - Page {count} sucessfully looped through")
-        logging.info(f"PME - End cycling through pages")
+        logging.info(f"PME - Finished cycling through pages.")
 
 
 
