@@ -113,7 +113,6 @@ def scrape_pme():
     new_text = "" #New text to parse
     old_text = "" #Old text to compare new text to (ensure that page has turned)
     entries = [] #Entries for DF
-    progress = [0, 0, 0, 0, 0] #Progress for log (logs up to 500 entries)
 
     #Regular expression to match entries. Follows schema of entries on site, with each category being seperated by a tab. 
     #Edge cases: Symbols and numbers in issuer names. Some country names have multiple words. Some countries have ", Republic of" as a suffix, which the expression does not capture. 

@@ -4,6 +4,8 @@ import pdfplumber
 import pandas as pd
 from playwright.sync_api import sync_playwright
 
+import requests
+
 #If run from main, imports from scripts folder. Else, imports locally.
 if __name__ != "__main__":
     import scripts.functions as functions
@@ -18,12 +20,12 @@ def scrape_kpa():
     path = functions.create_path(filename)
 
 
-    #Load page
+    #Start Playwright
     playwright = sync_playwright().start()
 
+    #Go to page
     browser = playwright.chromium.launch(headless=True, slow_mo=5, channel="chromium")
     page = browser.new_page()
-
     page.goto(url)
 
     #Reject Cookies
@@ -33,13 +35,24 @@ def scrape_kpa():
     #Find Holdings
     link_button = page.get_by_role('link', name="Innehav", exact=False)
 
+    #Format PDF link
+    pdf_link = link_button.get_attribute("href")
+    pdf_link = "https://www.kpa.se/" + pdf_link
 
-    #Get PDF
-    pdf_path = functions.get_pdf(filename, page, link_button, browser, path)
-    pdf = pdfplumber.open(pdf_path)
+    #Request Data
+    req = requests.get(pdf_link)
+
+    #Download file and save path
+    pdf_path = functions.download_file(req, "raw_kpa.pdf", path)
+
+    #Stop Playwright
+    browser.close()
     playwright.stop()
 
 
+
+    #Open PDF
+    pdf = pdfplumber.open(pdf_path)
 
     #Extract Entries Based on Font Size
     entries = []
@@ -86,5 +99,5 @@ def scrape_kpa():
     functions.export_df(final_df, filename, path)
 
 
-if __name__ != "__main__":
+if __name__ == "__main__":
     scrape_kpa()
