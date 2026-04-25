@@ -23,6 +23,9 @@ Scrapes bpfBOUW, a Dutch company that manages pension funds in the construction 
 ### bpl.py
 Scrapes BPL pension, a Dutch pension company for employees in agriculture or green energy. Scraper navigates to the downloads page of the BPL website, and uses playwright and requests to download the pdf. Then, it loads the pdf with pdfplumber and sorts through entries with regular expressions. Lastly, the data is formatted and exported as a tsv. No manual steps needed unless the website or format changes.
 
+### danica.py
+Danica Pension scraper this is automated barring structural changes to their website. It matches the shareholder tracker in most ways, except the ticker and cusip.
+
 ### detailhandel.py
 Scrapes Pensioen Funds Detailhandel, a company based in the Netherlands that manages the investments of non-food retail employees and those retired from the field. This scraper naviagtes to the website, finds the link to the pdf, saves it, and uses it to download the pdf (Note: get_pdf function was not used here, as window was not a popup.) Then, the pdf was split into two sections per page to account for edge cases, and desired attributes for each were saved into a list (Note: memory became an issue on this one, so only the desired attributes were saved, and all others were deleted). Then, regex is used to filter entries, the data is formatted, then exported as a tsv. No manual steps needed unless the website or format changes.
 
@@ -46,6 +49,9 @@ Scraper for PMT - The Metal and Technology Pension Fund from the Netherlands. Th
 
 ### pme.py
 Scraper for PME pensioenfonds: A Dutch pensionfund for employees in metal and tech industries. Info stored in a dynamic HTML, which takes approximately 5-10 mins to scrape with playwright. Scraper establishes connection to data source page with playwright, and extracts and formats needed information such as the next button, the equity number of pages, and the report date. Then, a while loop is created both to save raw data, and loop through pages to format said data. This script sometimes fails due to a bad network. If failed, try to run again once or twice before giving up. But, this script is fully automatic and won't need to be changed unless the format of the website does. NOTE: Attempts to fetch data directly were made both synchronously and asynchronously. Sync was slower, and async was faster but often missed pages. Playwright seems to be the best appraoch for now.
+
+### railov.py
+scrapes Pensioenfonds Rail + OV, a Dutch pension fund for the railways and public transport sector. scraper navigates to the Rail + OV website using playwright and downloads the PDF. searches the table of contents for pages with necessary shareholdings. extracts and matches entries from PDF using pdf plumber and regular expressions. writes to TSV.
 
 ### sampension.py
 Scraper for sampension, a Danish company that invests in "labor market and company pensions." This PDF's data is not stored in text, but images, so tesseract must be installed in order for it to work (see main git page). Scraper find the path to the tesseract EXE (untested on non-windows operating systems). Then, fetches the pdf with playwright and gets the report date from the HTML code. Then, each pdf page is looped through, creating an image, applying regex, and repeating until done (image is deleted when finished). Data is further formatted, then exported as TSV. No manual steps needed unless the website or format changes. Note: Tesseract messes up a lot, so upon updates manual review of this scraper is probably needed (log should indicate if this is the case). An easy way to compare columns is by pasting them into a spreadsheet and then looking for when they fall out of sync with the PDF.
