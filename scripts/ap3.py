@@ -37,9 +37,12 @@ def scrape_ap3():
     #Go to page that leads to PDF
     page.goto(url)
 
-    #Accept Cookies
-    cookies_button = page.get_by_role('button', name="Only accept necessary")
-    cookies_button.click()
+    #Try to accept cookies (sometimes doesn't appear in headless mode)
+    try:
+        cookies_button = page.get_by_role('button', name="Only accept necessary")
+        cookies_button.click()
+    except:
+        pass
 
 
 
@@ -117,7 +120,8 @@ def scrape_ap3():
     #Stop playwright
     playwright.stop()
 
-
+    #Establish report date pattern
+    date_pattern = re.compile("(?P<year>\d{4}).(?P<month>\d+).(?P<day>\d+)") #(uses weird dash)
 
 
 
@@ -126,14 +130,17 @@ def scrape_ap3():
     #Open context manager for raw_ap3_swedish.pdf
     with pdfplumber.open(pdf_paths[0]) as pdf:
 
-        #Get date of pdf
-        report_date = functions.get_pdf_date(pdf)
-
         #Extract text into one string
         text = ""
         for page in pdf.pages:
             text = text + page.extract_text()
         
+
+        #Find first instance of report date
+        report_date  = re.search(date_pattern, text)
+        report_date = report_date.group()
+        
+
         #Search for: Names and symbols; Space; All caps letters or digits followed by a space and "SS"; Space; Search for types of equity with or statement; Space; 3 capital letters; Minimum of 1 digit, followed by any number of groups of digits of 3 (non capturing), followed by a period and 2 digits; Space; Search for numbers the same way but without the periods; Space?; Any number of all caps letters or digits (?)
         swedish_pattern = re.compile("(?P<issuer>[A-Za-z\-\.\d\| /&,()]+) (?P<ticker>[A-Z\d]+ SS) (?P<sectype>Equity|Fund EQ) (?P<currency>[A-Z]{3}) (?P<shares>\d{1,3}(?:,\d{1,3})*\.\d{2}) (?P<value>\d{1,3}(?:,\d{1,3})*) ?(?P<isin>[A-Z0-9]+)?")
 
@@ -163,8 +170,9 @@ def scrape_ap3():
     #Open context manager for raw_ap3_foreign.pdf
     with pdfplumber.open(pdf_paths[1]) as pdf:
 
-        #Get date of pdf
-        report_date = functions.get_pdf_date(pdf)
+        #Find first instance of report date
+        report_date  = re.search(date_pattern, text)
+        report_date = report_date.group()
 
         #Extract text into one string
         text = ""
@@ -202,8 +210,9 @@ def scrape_ap3():
     #Open context manager for raw_ap3_fixed.pdf
     with pdfplumber.open(pdf_paths[2]) as pdf:
 
-        #Get pdf date 
-        report_date = functions.get_pdf_date(pdf)
+        #Find first instance of report date
+        report_date  = re.search(date_pattern, text)
+        report_date = report_date.group()
 
         #Extract pages to a string
         text = ""
@@ -243,8 +252,10 @@ def scrape_ap3():
     #Open context manager for raw_ap3_private.pdf
     with pdfplumber.open(pdf_paths[3]) as pdf:
 
-        #Set constants
-        report_date = functions.get_pdf_date(pdf)
+        #Find first instance of report date
+        report_date  = re.search(date_pattern, text)
+        report_date = report_date.group()
+        #Set constant
         multiplier = "x1_000_000"
 
         #Extract text to single string

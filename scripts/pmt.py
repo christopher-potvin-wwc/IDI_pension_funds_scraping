@@ -63,6 +63,9 @@ def scrape_pmt():
     df['Security - Market Value - Currency Code'] = "EUR"
     df['Data Source URL'] = url
 
+    #reorder columns :3
+    df = df.iloc[:, [2,0,1,3,4,5]]
+
     #write the dataframe as a tsv to the appropriate directory
     functions.export_df(df, filename, path)
 

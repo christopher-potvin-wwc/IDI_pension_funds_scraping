@@ -77,10 +77,17 @@ def export_df(df, filename, path=None):
 
 
 
-'''Input pdf object from pdfplumber. Return string'''
-def get_pdf_date(pdf):
+'''Input pdf object from pdfplumber. Return string. Not as accurate as report itself, use as last resort or if they happen to match.'''
+def get_pdf_date(pdf, extent="year"):
     report_date = pdf.metadata['CreationDate']
     report_date = report_date[2:6] + "-" + report_date[6:8] + "-" + report_date[8:10]
+
+    #If passed, report date remains full
+    if extent == "year":
+        report_date = report_date[0:4]
+    elif extent == "year-month":
+        report_date = report_date[0:7]
+
     return report_date
 
 
@@ -138,12 +145,21 @@ def convert_month(month, offset=None):
 
 '''
 Download a file by copying its data with binary.
-request = Web request or other iterable content
+input = link or request to download
 full_filename = filename with suffix indcluded (pdf, html, etc)
 path = path to download to
 chunk_size (optional) = size of chunks to iterate at a time in bits
 '''
-def download_file(request, full_filename, path, chunk_size=8192):
+def download_file(input, full_filename, path, chunk_size=8192):
+
+    #Is link (hopefully)
+    if str(type(input)) == "<class 'str'>":
+        request = requests.get(input)
+    #Is request (hopefully)
+    else:
+        request = input
+
+    
 
     #Compile path
     file_path = path/full_filename

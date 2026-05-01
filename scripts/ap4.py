@@ -97,9 +97,6 @@ def scrape_ap4():
 
     with pdfplumber.open(pdf_path) as pdf:
 
-        #Get date of pdf
-        report_date = functions.get_pdf_date(pdf)
-
         #Columns "No of Shares" and "Fair Value" not easily/consistently seperated with regex. Addressed while extracting text here.
         text = ""
         for page in pdf.pages:
@@ -115,6 +112,24 @@ def scrape_ap4():
             for i, d in enumerate(right, start=0):
                 text = text + left[i]['text'] + "!" + right[i]['text'] + "!!!"
         
+
+        #Regex for date
+        date_pattern = re.compile("(?P<day>\d+).(?P<month>\d+).(?P<year>\d{4})")
+
+        #Find first instance of report date
+        report_date  = re.search(date_pattern, text)
+
+        #Split match into 3 vars to format
+        day, month, year = report_date.groups()
+
+        #If either month or day only has one digit, add zero to format
+        if len(day) < 2:
+            day = "0" + day
+        if len(month) < 2:
+            month = "0" + month
+
+        #Stitch together
+        report_date = year + "-" + month + "-" + day
 
 
         #Search for: Word beginning with a capital letter or digit, followed by any letter, digits, spaces, and symbols; Space; Two captial letters; Space; Any number of digits and spaces;!;Any number of digits and spaces;Space;Digits and capital letters, followed by space, followed by 2 captial letters; Space; a digit, a comma, and 2 digits; Space; a digit, a comma, and 2 digits;!!!. Sometimes ownership, power, and isin missing, addressed by ?

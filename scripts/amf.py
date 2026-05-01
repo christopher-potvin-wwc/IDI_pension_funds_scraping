@@ -120,7 +120,7 @@ def scrape_amf():
                             size = t['chars'][0]['bottom'] - t['chars'][0]['top']
 
                             #If the font name and the size match format of their entries
-                            if t['chars'][0]['fontname'] == "TNBONQ+T-Star-Medium" and size == 7:
+                            if t['chars'][0]['fontname'] == "UUAFCJ+T-Star-Medium" and size == 7:
                                 #Filter out watermark and page labels
                                 if not re.search("sid|AMF", t['text']):
                                     #Append an entry, with t['text'] being the issuer

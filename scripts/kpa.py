@@ -3,7 +3,6 @@
 import pdfplumber
 import pandas as pd
 from playwright.sync_api import sync_playwright
-
 import requests
 
 #If run from main, imports from scripts folder. Else, imports locally.
@@ -12,9 +11,12 @@ if __name__ != "__main__":
 else:
     import functions
 
+
+
+
 '''Main function'''
 def scrape_kpa():
-    #Setup
+    #--------------/Setup/-----------------#
     filename = "KPA"
     url = "https://www.kpa.se/om-kpa-pension/vart-hallbarhetsarbete/ansvarsfulla-investeringar/innehav-och-uteslutna-bolag/"
     path = functions.create_path(filename)
@@ -51,7 +53,7 @@ def scrape_kpa():
 
 
 
-    #Open PDF
+    #-----------------/Extract Data/---------------#
     pdf = pdfplumber.open(pdf_path)
 
     #Extract Entries Based on Font Size
@@ -69,11 +71,12 @@ def scrape_kpa():
 
 
 
-    #Formatting Data
+
+    #--------------/Formatting Data/--------------#
 
     #Create columns
     shareholder_name = [filename]
-    report_date = [functions.get_pdf_date(pdf)]
+    report_date = [functions.get_pdf_date(pdf, extent="year")]
     url = [url]
 
     number_of_entries = len(entries)
@@ -93,7 +96,9 @@ def scrape_kpa():
 
 
 
-    #Export
+    #-----------------/Export/---------------#
+
+    #Create df
     final_df = pd.DataFrame(df)
     #Export as tsv
     functions.export_df(final_df, filename, path)

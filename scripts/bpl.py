@@ -70,13 +70,31 @@ def scrape_bpl():
     for p in pdf.pages:
         text = text + p.extract_text()
 
+    
+    #Regex for date
+    date_pattern = re.compile("(?P<day>\d+)-(?P<month>\d+)-(?P<year>\d{4})")
+
+    #Find first instance of report date
+    report_date  = re.search(date_pattern, text)
+
+    #Split match into 3 vars to format
+    day, month, year = report_date.groups()
+
+    #If either month or day only has one digit, add zero to format
+    if len(day) < 2:
+        day = "0" + day
+    if len(month) < 2:
+        month = "0" + month
+
+    #Stitch together
+    report_date = year + "-" + month + "-" + day
+
 
     #Regex follows schema of an entry in one column. Edge cases: Symbols in issuer, and occasional spaces in value number.
     pattern = re.compile("\n(?P<issuer>[A-Za-z\d /&+\-\.]+) (?P<stock>\d{1,3},\d{2}%) (?P<value>[\d\. ]+) ")
 
     #Setup constants for entries
     shareholder = "BPL Pension"
-    report_date = functions.get_pdf_date(pdf)
     currency = "EUR"
     multiplier = "x1_000"
     entries = []
