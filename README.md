@@ -19,4 +19,5 @@ To download dependencies:
 To run this project:
 1. Clone this github repository in your code editor
 2. In the terminal, run the command "uv sync" to download dependencies. (Make sure your working directory is set to the main repository folder.)
+3. Run the command "playwright install" to ensure that you have the browsers necessary for playwright's web navigation.
 3. Execute the main script by typing "py main.py" into the terminal.
