@@ -35,8 +35,11 @@ def scrape_detailhandel():
     #Go to page that leads to PDF
     page.goto(url)
 
-    #Reject Cookies
-    page.get_by_role('button', name="alles weigeren").click()
+    #Reject Cookies if necessary
+    try:
+        page.get_by_role('button', name="alles weigeren").click()
+    except:
+        pass
 
     #Get URL of pdf page (Not a popup, therefore get_pdf function doesn't work here)
     url = page.get_by_role('link', name="Beleggingen per", exact=False).get_attribute('href')
